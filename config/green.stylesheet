@@ -1,0 +1,15 @@
+QFrame
+{
+    background-color: #5f9457
+}
+
+QListWidget
+{
+    background-color: #d5f4d6
+}
+
+QStatusBar
+{
+    font-size: 20pt;
+    color: #157417;
+}
