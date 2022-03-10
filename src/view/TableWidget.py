@@ -1,5 +1,5 @@
 from PyQt5.QtGui import QResizeEvent
-from PyQt5.QtWidgets import QGridLayout, QWidget, QPushButton, QSizePolicy, QTableWidget, QTableWidgetItem
+from PyQt5.QtWidgets import QGridLayout, QWidget, QPushButton, QSizePolicy, QTableWidget, QTableWidgetItem, QHeaderView
 from src.utils.Translator import Translator
 
 tr = Translator.inst()
@@ -20,11 +20,9 @@ class TableWidget(QWidget):
         self.__table.setColumnCount(3)
         self.__table.setRowCount(0)
         self.__table.setHorizontalHeaderLabels(["Id", tr.parameter(), tr.value()])
-        id_width = 50
-        value_width = 100
-        self.__delta_width = id_width + value_width + 3
-        self.__table.horizontalHeader().resizeSection(0, id_width)
-        self.__table.horizontalHeader().resizeSection(3, value_width)
+        self.__table.horizontalHeader().setSectionResizeMode(0, QHeaderView.ResizeMode.ResizeToContents)
+        self.__table.horizontalHeader().setSectionResizeMode(1, QHeaderView.ResizeMode.Stretch)
+        self.__table.horizontalHeader().setSectionResizeMode(2, QHeaderView.ResizeMode.Interactive)
 
         self.__table.verticalHeader().hide()
         grid_layout.addWidget(self.__table, 0, 0, 1, 2)
@@ -42,20 +40,13 @@ class TableWidget(QWidget):
         self.__add_line_button.setText(tr.add_line())
         self.__delete_line_button.setText(tr.del_line())
 
-    def resizeEvent(self, event: QResizeEvent) -> None:
-        QWidget.resizeEvent(self, event)
-        self.__table.horizontalHeader().resizeSection(1, self.__table.width() - self.__delta_width)
-
     def add_line(self):
-        self.__table.insertRow(self.__table.rowCount())
-        for column in range(3):
-            text = str(self.__table.rowCount())
-            if column == 0:
-                self.__table.setItem(self.__table.rowCount() - 1, column, QTableWidgetItem('Id_' + text))
-            elif column == 1:
-                self.__table.setItem(self.__table.rowCount() - 1, column, QTableWidgetItem(tr.parameter() + '_' + text))
-            elif column == 2:
-                self.__table.setItem(self.__table.rowCount() - 1, column, QTableWidgetItem(text + text + text))
+        row_index = self.__table.rowCount()
+        self.__table.setRowCount(row_index + 1)
+
+        self.__table.setItem(row_index, 0, QTableWidgetItem(f'Id_{row_index}'))
+        self.__table.setItem(row_index, 1, QTableWidgetItem(tr.parameter() + str(row_index)))
+        self.__table.setItem(row_index, 2, QTableWidgetItem(str(row_index) * 3))
 
     def delete_line(self):
         self.__table.removeRow(self.__table.rowCount() - 1)

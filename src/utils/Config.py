@@ -19,7 +19,7 @@ class Config:
             raise e
         self.conf.read(self.__config_path)
 
-    def get_style(self):
+    def get_style(self) -> str:
         return self.conf.get('view', 'style')
 
     def set_style(self, style: str):
@@ -27,7 +27,7 @@ class Config:
         with open(self.__config_path, 'w') as configfile:
             self.conf.write(configfile)
 
-    def get_lang(self):
+    def get_lang(self) -> str:
         return self.conf.get('view', 'lang')
 
     def set_lang(self, lang: str):

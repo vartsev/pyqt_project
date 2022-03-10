@@ -81,5 +81,5 @@ class MainWindow(QMainWindow):
             Config.inst().set_style(style)
 
     @staticmethod
-    def get_path_by_style(style: str):
+    def get_path_by_style(style: str) -> str:
         return 'config/' + style.lower() + '.stylesheet'
